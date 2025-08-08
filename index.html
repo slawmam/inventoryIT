@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Info Barang Inventaris IT</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f8f9fa;
+      padding: 2rem;
+    }
+    .box {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🧾 Informasi Barang</h2>
+    <p><strong>Nama:</strong> <span id="nama">-</span></p>
+    <p><strong>Lokasi:</strong> <span id="lokasi">-</span></p>
+    <p><strong>Maintenance Terakhir:</strong> <span id="terakhir">-</span></p>
+    <p><strong>Kondisi:</strong> <span id="kondisi">-</span></p>
+    <p><strong>Yang Dibersihkan:</strong> <span id="dibersihkan">-</span></p>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <script>
+    // Firebase config dari kamu
+    const firebaseConfig = {
+      apiKey: "AIzaSyAD3cYphSizLCQ3q9eiP7vemMNUbps_v-Q",
+      authDomain: "inventoryitdivisi.firebaseapp.com",
+      databaseURL: "https://inventoryitdivisi-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "inventoryitdivisi",
+      storageBucket: "inventoryitdivisi.firebasestorage.app",
+      messagingSenderId: "201288061080",
+      appId: "1:201288061080:web:fe37ce7d5340ac819440ed"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get("id");
+
+    if (id) {
+      db.ref("barang/" + id).once("value").then(snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          document.getElementById("nama").textContent = data.nama || "-";
+          document.getElementById("lokasi").textContent = data.lokasi || "-";
+          document.getElementById("terakhir").textContent = data.terakhir || "-";
+          document.getElementById("kondisi").textContent = data.kondisi || "-";
+          document.getElementById("dibersihkan").textContent = data.dibersihkan || "-";
+        } else {
+          document.querySelector(".box").innerHTML = "<p>Barang tidak ditemukan.</p>";
+        }
+      });
+    } else {
+      document.querySelector(".box").innerHTML = "<p>ID tidak valid.</p>";
+    }
+  </script>
+</body>
+</html>
