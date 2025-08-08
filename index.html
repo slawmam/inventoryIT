@@ -28,7 +28,7 @@
     <h2>🧾 Informasi Barang</h2>
     <p><strong>Nama:</strong> <span id="nama">-</span></p>
     <p><strong>Lokasi:</strong> <span id="lokasi">-</span></p>
-    <p><strong>Maintenance Terakhir:</strong> <span id="terakhir">-</span></p>
+    <p><strong>Maintenance Terakhir:</strong> <span id="terakhir_maintenance">-</span></p>
     <p><strong>Kondisi:</strong> <span id="kondisi">-</span></p>
     <p><strong>Yang Dibersihkan:</strong> <span id="dibersihkan">-</span></p>
   </div>
@@ -61,7 +61,7 @@
         if (data) {
           document.getElementById("nama").textContent = data.nama || "-";
           document.getElementById("lokasi").textContent = data.lokasi || "-";
-          document.getElementById("terakhir").textContent = data.terakhir || "-";
+          document.getElementById("terakhir").textContent = data.terakhir_maintenance || "-";
           document.getElementById("kondisi").textContent = data.kondisi || "-";
           document.getElementById("dibersihkan").textContent = data.dibersihkan || "-";
         } else {
@@ -74,3 +74,4 @@
   </script>
 </body>
 </html>
+
