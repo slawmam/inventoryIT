@@ -1,38 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Info Barang Inventaris IT</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f8f9fa;
-      padding: 2rem;
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+      margin: 0;
+      padding: 16px;
     }
-    .box {
-      background: white;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 500px;
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 20px;
+      max-width: 420px;
       margin: auto;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     }
-    h2 {
-      margin-top: 0;
+
+    .header {
+      text-align: center;
+      margin-bottom: 16px;
     }
+
+    .header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .sub {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #e5e7eb;
+    }
+
+    .item:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-size: 0.85rem;
+      color: #475569;
+    }
+
+    .value {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      text-align: right;
+      max-width: 55%;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .footer {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 16px;
+      }
+      .header h2 {
+        font-size: 1.25rem;
+      }
+    
+.umur-normal {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.umur-tua {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+}
   </style>
 </head>
+
 <body>
 
-  <div class="box">
-    <h2>🧾 Informasi Barang</h2>
-    <p><strong>Nama:</strong> <span id="nama">-</span></p>
-    <p><strong>Lokasi:</strong> <span id="lokasi">-</span></p>
-    <p><strong>Umur Perangkat:</strong> <span id="umur">-</span></p>
-    <p><strong>Maintenance Terakhir:</strong> <span id="terakhir_maintenance">-</span></p>
-    <p><strong>Kondisi:</strong> <span id="kondisi">-</span></p>
-    <p><strong>Yang Dibersihkan:</strong> <span id="dibersihkan">-</span></p>
+  <div class="card">
+    <div class="header">
+      <h2>🧾 Informasi Barang</h2>
+      <div class="sub">Inventaris IT Outlet</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Nama Perangkat</div>
+      <div class="value" id="nama">-</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Lokasi</div>
+      <div class="value" id="lokasi">-</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Umur Perangkat</div>
+      <div class="value badge" id="umur">-</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Maintenance Terakhir</div>
+      <div class="value" id="terakhir_maintenance">-</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Kondisi</div>
+      <div class="value" id="kondisi">-</div>
+    </div>
+
+    <div class="item">
+      <div class="label">Yang Dibersihkan</div>
+      <div class="value" id="dibersihkan">-</div>
+    </div>
+
+    <div class="footer">
+      Sistem Inventaris IT
+    </div>
   </div>
 
   <!-- Firebase SDK -->
@@ -56,20 +173,28 @@
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
 
-    function hitungUmur(tgl) {
-      if (!tgl) return "-";
-      const start = new Date(tgl);
-      const now = new Date();
+   
+function hitungUmurDetail(tgl) {
+  if (!tgl) return { text: "-", tahun: 0 };
 
-      let tahun = now.getFullYear() - start.getFullYear();
-      let bulan = now.getMonth() - start.getMonth();
+  const start = new Date(tgl);
+  const now = new Date();
 
-      if (bulan < 0) {
-        tahun--;
-        bulan += 12;
-      }
-      return `${tahun} th ${bulan} bln`;
-    }
+  let tahun = now.getFullYear() - start.getFullYear();
+  let bulan = now.getMonth() - start.getMonth();
+
+  if (bulan < 0) {
+    tahun--;
+    bulan += 12;
+  }
+
+  return {
+    text: `${tahun} th ${bulan} bln`,
+    tahun: tahun
+  };
+}
+
+
 
     if (id) {
       db.ref("barang/" + id).once("value").then(snapshot => {
@@ -80,15 +205,29 @@
           document.getElementById("terakhir_maintenance").textContent = data.terakhir_maintenance || "-";
           document.getElementById("kondisi").textContent = data.kondisi || "-";
           document.getElementById("dibersihkan").textContent = data.dibersihkan || "-";
+          const umurData = hitungUmurDetail(
+  data.tanggal_pembelian || data.tanggal_pasang
+);
 
-          document.getElementById("umur").textContent =
-            hitungUmur(data.tanggal_pembelian || data.tanggal_pasang);
+const umurEl = document.getElementById("umur");
+umurEl.textContent = umurData.text;
+
+// reset class dulu
+umurEl.classList.remove("umur-normal", "umur-tua");
+
+// logika warna
+if (umurData.tahun >= 5) {
+  umurEl.classList.add("umur-tua");   // 🔴 merah
+} else {
+  umurEl.classList.add("umur-normal"); // 🔵 normal
+}
+
         } else {
-          document.querySelector(".box").innerHTML = "<p>Barang tidak ditemukan.</p>";
+          document.querySelector(".card").innerHTML = "<p>Barang tidak ditemukan.</p>";
         }
       });
     } else {
-      document.querySelector(".box").innerHTML = "<p>ID tidak valid.</p>";
+      document.querySelector(".card").innerHTML = "<p>ID tidak valid.</p>";
     }
   </script>
 
