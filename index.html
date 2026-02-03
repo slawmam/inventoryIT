@@ -24,10 +24,12 @@
   </style>
 </head>
 <body>
+
   <div class="box">
     <h2>🧾 Informasi Barang</h2>
     <p><strong>Nama:</strong> <span id="nama">-</span></p>
     <p><strong>Lokasi:</strong> <span id="lokasi">-</span></p>
+    <p><strong>Umur Perangkat:</strong> <span id="umur">-</span></p>
     <p><strong>Maintenance Terakhir:</strong> <span id="terakhir_maintenance">-</span></p>
     <p><strong>Kondisi:</strong> <span id="kondisi">-</span></p>
     <p><strong>Yang Dibersihkan:</strong> <span id="dibersihkan">-</span></p>
@@ -54,6 +56,21 @@
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
 
+    function hitungUmur(tgl) {
+      if (!tgl) return "-";
+      const start = new Date(tgl);
+      const now = new Date();
+
+      let tahun = now.getFullYear() - start.getFullYear();
+      let bulan = now.getMonth() - start.getMonth();
+
+      if (bulan < 0) {
+        tahun--;
+        bulan += 12;
+      }
+      return `${tahun} th ${bulan} bln`;
+    }
+
     if (id) {
       db.ref("barang/" + id).once("value").then(snapshot => {
         const data = snapshot.val();
@@ -63,6 +80,9 @@
           document.getElementById("terakhir_maintenance").textContent = data.terakhir_maintenance || "-";
           document.getElementById("kondisi").textContent = data.kondisi || "-";
           document.getElementById("dibersihkan").textContent = data.dibersihkan || "-";
+
+          document.getElementById("umur").textContent =
+            hitungUmur(data.tanggal_pembelian || data.tanggal_pasang);
         } else {
           document.querySelector(".box").innerHTML = "<p>Barang tidak ditemukan.</p>";
         }
@@ -71,5 +91,6 @@
       document.querySelector(".box").innerHTML = "<p>ID tidak valid.</p>";
     }
   </script>
+
 </body>
 </html>
